@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite id="6a342415-929c-40b1-a246-b6874fe17f13" name="Reusable_Libraries" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="d623cc22-99ae-4bac-804f-1d2454f267f5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Reusable_Functions" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Excel_Interaction" id="06b2daec-45f1-4287-ab46-5f825c3f7576"><con:settings/><con:config><script><![CDATA[import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.ss.util.*;
+import org.apache.poi.ss.usermodel.*;
+
+import java.io.*;
+
+public class Excel_Interaction
+{
+	def log
+	def context
+	def testRunner
+	
+     //Constructor of Class Excel_Interaction
+     def Excel_Interaction(logIn, contextIn, testRunnerIn)
+	{
+	 this.log = logIn
+	 this.context = contextIn
+	 this.testRunner = testRunnerIn
+	}
+	/*
+	 ********************************************************************************
+	 Function Name:-fetchInputDatafromExcel()
+	 Description:- To Fetch the data input by the user in the data input sheet
+	 Parameters:-strExcelReadPath,strExcelSheetName
+	 Return value:- dpSheetArray
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+	  
+	String[][] fetchInputDatafromExcel(String strExcelReadPath,String strExcelSheetName){
+			//Read Data from Xlsx File
+			File file = new File(strExcelReadPath);
+			FileInputStream inputStream = new FileInputStream(file);
+		try{
+			//Create a Workbook object
+			Workbook workbook = new XSSFWorkbook(inputStream);
+			//Create an object of Sheet
+			Sheet sheet = workbook.getSheet(strExcelSheetName);
+			//Fetch Row count
+			int rowCount = sheet.getLastRowNum();
+			//Fetch Column count for the rows
+			int columnCount =  sheet.getRow(0).getLastCellNum();
+			String[][] dpSheetArray = new String[rowCount+1][columnCount];
+			for (int i=0; i<=rowCount; i++){
+				Row row = sheet.getRow(i);
+				for (int j=0; j<row.getLastCellNum(); j++){
+					XSSFCell dpCell = row.getCell(j);
+					try{
+						//Switch case to check the data type input in the excel
+						switch(dpCell.getCellType()){
+							case 0 :
+							dpSheetArray[i][j] = ((int)dpCell.getNumericCellValue()).toString();
+							break;	
+							case 1 :
+							dpSheetArray[i][j] = dpCell.getStringCellValue();
+							break;
+							}
+						}catch(Exception e){	
+					}
+				}
+			}
+			return dpSheetArray;
+		}catch(Exception e){
+			def strErrorMessage = e.getMessage()
+			//****************Call a function to create a reference to Utility Functions**************************
+			def objUtilityFunctions=createReferenceToUtilityFunctions();
+			objUtilityFunctions.notifyEndOfExecution("Test Execution INTERRUPTED!!\n Error Found : Excel Input Data NOT fetched correctly.\n Exception caught: "+strErrorMessage);
+		}
+	}
+	/*
+	 ********************************************************************************
+	 Function Name:-getColumnNumber_ForColumnName()
+	 Description:- To Fetch the column number for a particular column name 
+	 Parameters:- strColumnName,strDPSheetArray
+	 Return value:- intColumnNumber
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	  */
+	 def getColumnNumber_ForColumnName(String strColumnName,String[][] strDPSheetArray){
+	 	try{
+	 		int intDPColumnCount = strDPSheetArray[0].length;
+	 		for(int itrCol=0; itrCol<intDPColumnCount; itrCol++){
+	 			if((strDPSheetArray[0][itrCol].trim()).equalsIgnoreCase(strColumnName)){
+	 				return itrCol;
+	 				break;
+	 			}
+	 		}
+	 		if((itrCol).equals(intDPColumnCount)){
+	 			propertyFileInfo=testRunner.testCase.getTestStepByName( "FileProperties" );
+	 			propertyFileInfo.setPropertyValue("ERROR_MESSAGE","Run Flag status is NOT found in DataPool sheet")
+	 		}
+	 	}catch(Exception e){
+	 		def strErrorMessage = e.getMessage(); 
+			//****************Call a function to create a reference to Utility Functions************************
+			def objUtilityFunctions=createReferenceToUtilityFunctions();
+			objUtilityFunctions.notifyEndOfExecution("Test Execution INTERRUPTED!!\n Error Found: RunFlag column number NOT fetched correctly from input sheet.\n Exception caught: "+strErrorMessage);
+	 	}
+	 	
+	 }
+
+	 /*
+	 ********************************************************************************
+	 Function Name:- writeOutputDataInExcel()
+	 Description:- To write the data into the Excel sheet
+	 Parameters:- strExcelWritePath,strExcelSheetName,outputData
+	 Return value:- Null
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+	 def writeOutputDataInExcel(String strExcelWritePath,String strExcelSheetName,HashMap<String,String> outputData){
+		//Create a object of File class to open xlsx file
+    		File file = new File(strExcelWritePath);
+		//Create an object of FileInputStream class to read excel file
+	 	FileInputStream inputStream = new FileInputStream(file);
+	 	//Create a Workbook object
+		Workbook workbook = new XSSFWorkbook(inputStream);
+	 	Sheet sheet = workbook.getSheet(strExcelSheetName);
+	 	//Get keyset from hashmap
+		Set<String> keyset = outputData.keySet();
+		//Get row count from the excel sheet
+		int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
+		Row row = sheet.createRow(rowCount+1);
+		for (String key : keyset) {
+		 	//Get value of the key
+		     String objArr = outputData.get(key);
+		  	Row firstRow = sheet.getRow(0);
+		  	int intCountColumn=firstRow.getLastCellNum();
+		  	for(int i=0;i<intCountColumn;i++){
+		  		if((firstRow.getCell(i).getStringCellValue()).equals(key))
+		  		{
+		  			Cell cell = row.createCell(i);
+		  			cell.setCellValue(outputData.get(key)).toString();
+		  			break;
+		  		}	
+		  	}	  	
+		}
+		//Close the worksheet
+		inputStream.close();
+		//Create an object of FileOutputStream class to create write data in excel file
+    		FileOutputStream outputStream = new FileOutputStream(file);
+    		//write data in the excel file
+    		workbook.write(outputStream);
+    		//close output stream
+    		outputStream.close();
+    	}
+
+	 /*
+	 ********************************************************************************
+	 Function Name:- clearSheetContentsExceptHeader()
+	 Description:- Clears the content of the excel sheet input by the user
+	 Parameters:- strExcelWritePath,strExcelSheetName
+	 Return value:- Null
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+    	def clearSheetContentsExceptHeader(String strExcelWritePath,String strExcelSheetName)
+    	{
+    		//Read Data from Xlsx File
+		File file = new File(strExcelWritePath);
+		FileInputStream inputStream = new FileInputStream(file);
+		//Create a Workbook object
+		Workbook workbook = new XSSFWorkbook(inputStream);
+		//Create an object of Sheet
+		Sheet sheet = workbook.getSheet(strExcelSheetName);
+    		for (int index = sheet.getLastRowNum(); index > sheet.getFirstRowNum(); index--) {
+        		sheet.removeRow( sheet.getRow(index));
+    		}
+    		FileOutputStream fileOut = new FileOutputStream(file);
+	     workbook.write(fileOut);
+	     fileOut.close(); 
+    	}
+
+	/*
+	 ********************************************************************************
+	 Function Name:- createReferenceToUtilityFunctions()
+	 Description:- Creates and returns a reference to call utility function class 
+	 Parameters:- 
+	 Return value:- objUtilityFunctions
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+	def createReferenceToUtilityFunctions(){
+		def objUtilityFunctionsPath = testRunner.testCase.testSuite.project.testSuites["Reusable_Libraries"].testCases["Reusable_Functions"].getTestStepByName("Class_UtilityFunctions")
+		//************************************************************************************************
+		//Call and initialize the object of Utility Library class
+		objUtilityFunctionsPath.run(testRunner, context)
+		def objUtilityFunctions = context.objUtilityFunctions
+		return objUtilityFunctions;		
+	}
+    	
+}
+//*******************Set the object of Excel Interaction to current test context*******
+context.setProperty( "objExcelInteraction", new Excel_Interaction( log, context, testRunner) )]]></script></con:config></con:testStep><con:testStep type="groovy" name="Class_UtilityFunctions" id="278c3708-6da6-4f0f-866e-d6a8421d265e"><con:settings/><con:config><script>import javax.swing.JOptionPane;
+public class Class_UtilityFunctions
+{
+	def log
+	def context
+	def testRunner
+	
+     //Constructor of Class Class_UtilityFunctions
+     def Class_UtilityFunctions(logIn, contextIn, testRunnerIn)
+	{
+	 this.log = logIn
+	 this.context = contextIn
+	 this.testRunner = testRunnerIn
+	}
+/*
+	 ********************************************************************************
+	 Function Name:-setEndPointsForRequests()
+	 Description:- To set the endpoints of all request input by the user in the data input sheet
+	 Parameters:-objExcelInteraction,strExcelReadPath,strExcelSheetName
+	 Return value:- Null
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+	def setEndPointsForRequests(def objExcelInteraction,String strExcelReadPath,String strExcelSheetName,String strRequestName){
+		//Set EndpointURL's for all the required requests
+		try{
+			String[][] strEndPointSheetArray=objExcelInteraction.fetchInputDatafromExcel(strExcelReadPath,strExcelSheetName)
+			//Get row and column count
+			int dpColumnCount = strEndPointSheetArray[0].length, dpRowCount=strEndPointSheetArray.length -1;
+			for(int itr=1; itr&lt;= dpRowCount ;itr++){
+				if(((strEndPointSheetArray[itr][0]).trim()).equalsIgnoreCase(strRequestName)){
+					testRunner.testCase.getTestStepByName(strEndPointSheetArray[itr][0]).getTestRequest().setEndpoint(strEndPointSheetArray[itr][1]).toString();
+					log.info("  EndPoint set for Request : "+strEndPointSheetArray[itr][0]+"\n");
+					return;				
+				}			
+			}
+		}catch(Exception e){
+			log.info("  EndPoint NOT set for Requests successfully");
+		}
+		
+	}
+	/*
+	 ********************************************************************************
+	 Function Name:-notifyEndOfExecution()
+	 Description:- To notify the user that the execution has Completed
+	 Parameters:-objExcelInteraction
+	 Return value:- Null
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+	 
+	def notifyEndOfExecution(String strMessage){
+		JOptionPane.showMessageDialog(null,
+		strMessage,
+		"Completed",
+		JOptionPane.INFORMATION_MESSAGE);
+		//testRunner.gotoStepByName("FileProperties");	
+		}
+	/*
+	 ********************************************************************************
+	 Function Name:-removePropertyName_Value()
+	 Description:- Delete property names and values
+	 Parameters:-objExcelInteraction
+	 Return value:- Null
+	 Author:- Abhishek Dhingra
+	 Comments:-
+	 ********************************************************************************
+	 */
+	 def removePropertyName_Value(def localFileProperties){
+	 	
+		 //def localFileProperties=testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("LocalFileProperties")
+		 localFileProperties.clearPropertyValues();
+		 String[] propToRemove = new String[localFileProperties.getPropertyCount()];
+		 propToRemove = localFileProperties.getPropertyNames();
+		 for ( int i = 0 ; i &lt; propToRemove.size(); i++ ){
+		    localFileProperties.removeProperty( propToRemove[i] );
+		 }
+	 }
+}
+
+//*******************Set the object of Class_UtilityFunctions to current test context*******
+context.setProperty( "objUtilityFunctions", new Class_UtilityFunctions( log, context, testRunner) )</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite>

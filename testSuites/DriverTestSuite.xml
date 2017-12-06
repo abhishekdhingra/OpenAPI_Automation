@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite name="Driver_TestSuite" id="b0dfb36e-1ec3-40a5-823c-b7c0d903815a" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="aeaf811d-100c-4ea8-b66d-d74640823706" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Driver_TestCase" searchProperties="true"><con:settings/><con:testStep type="groovy" name="IncrimentSerialNumber" id="211dba81-226b-43e2-9ca6-a28cff54cfaa" disabled="true"><con:settings/><con:config><script>import javax.swing.JOptionPane;
+//Defining Property File Information
+def propertyFileInfo = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("FileProperties")
+
+String SlNo = propertyFileInfo.getProperty( "slNo" ).value;
+String EndSlNo = propertyFileInfo.getProperty( "EndslNo" ).value;
+
+//Converting String into Interger
+int StartSlNo =Integer.parseInt(SlNo);
+int EndingSlNo =Integer.parseInt(EndSlNo);
+
+//Finding the condition to stop execution
+log.info("STAAAARt" +StartSlNo);
+log.info("ENDddddd" +EndingSlNo);
+if(StartSlNo >= EndingSlNo){
+	//Re-initialize the Serial Number to 1
+	log.info("INSIDDDDDEEEEEEE Inc");
+	def localPropertyFileInfo = testRunner.testCase.getTestStepByName( "LocalFileProperties" );
+	localPropertyFileInfo.clearPropertyValues();
+	localPropertyFileInfo.setPropertyValue("slNo","0");
+	JOptionPane.showMessageDialog(null,
+	"&lt;HTML>&lt;B>Completed the Test Execution&lt;/B>&lt;/HTML>",
+	"Completed",
+	JOptionPane.INFORMATION_MESSAGE);
+	//testRunner.gotoStepByName("FileProperties");
+}
+else{
+	log.info("Return came back");
+	testRunner.gotoStepByName("Initialize_Driver");
+}</script></con:config></con:testStep><con:testStep type="properties" name="LocalFileProperties" id="1d30a641-b0c0-4183-9315-b76f2d3795f9"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" discardValuesOnSave="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>slNo</con:name><con:value>0</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="properties" name="FileProperties" id="1a4e4207-8884-400c-b0fc-a54298298a39"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>slNo</con:name><con:value>15</con:value></con:property><con:property><con:name>EndslNo</con:name><con:value>15</con:value></con:property><con:property><con:name>TestSuiteName</con:name><con:value>C:\\MSC Service Automation\\TestSuite_2.xlsx</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="groovy" name="Initialize_Driver" id="4ed7e0d2-b7e4-467a-8354-e3dbbf31f48d"><con:settings/><con:config><script>	//****************Reference to Different test Suite/testcase/teststep****************************
+try{
+	def strExcelReadPath = testRunner.testCase.testSuite.project.getPropertyValue( "ExcelReadPath" )
+	def strExcelSuiteSheetPath = testRunner.testCase.testSuite.project.getPropertyValue( "ExcelSuiteSheetPath" )
+	reusableLibraries_TestCase=testRunner.testCase.testSuite.project.testSuites["Reusable_Libraries"].testCases["Reusable_Functions"]
+	def excelInteractionModule_TestStep = reusableLibraries_TestCase.getTestStepByName("Excel_Interaction")
+	def utilityFunctions_TestStep = reusableLibraries_TestCase.getTestStepByName("Class_UtilityFunctions")
+	def localFileProperties=testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("LocalFileProperties")
+	def fileProperties=testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("FileProperties")
+	
+	//--Define the external string object	
+	def properties = new com.eviware.soapui.support.types.StringToObjectMap ()
+	def async = false
+
+	//Call and initialize the objects of Reusable Library classes
+	excelInteractionModule_TestStep.run(testRunner, context)
+	def objExcelInteraction = context.objExcelInteraction
+	utilityFunctions_TestStep.run(testRunner, context)
+	def objUtilityFunctions = context.objUtilityFunctions
+		
+	String strExcelWritePath="C:\\MSC Service Automation\\Sample.xlsx"
+	//***********Call function to delete contents of output file during start of execution************
+	int slNumber = (localFileProperties.getProperty( "slNo" ).value).toInteger();
+	if (slNumber==0){
+		objExcelInteraction.clearSheetContentsExceptHeader(strExcelWritePath,"Sheet1");	
+	}	
+	//******************Call function in Excel Interaction Testcase class to get sheet name************
+	String[][] strTestSuitesArray=objExcelInteraction.fetchInputDatafromExcel(strExcelSuiteSheetPath,"Test_Suites")
+	int intTSRowCount=strTestSuitesArray.length;
+	int iSuite,intTestCaseExecuted=0;
+	int cont=0;
+	for(iSuite=1;iSuite&lt;=intTSRowCount-1;iSuite++){
+		if(!(strTestSuitesArray[iSuite][1].trim()).equalsIgnoreCase("Yes")){
+			continue;	
+		}
+		//******************Call function in Excel Interaction Testcase class******************************
+		fileProperties.setPropertyValue("TestSuiteName", strExcelReadPath+"\\"+strTestSuitesArray[iSuite][0].trim()+".xlsx");
+		String[][] strDPSheetArray=objExcelInteraction.fetchInputDatafromExcel(strExcelReadPath+"\\"+strTestSuitesArray[iSuite][0].trim()+".xlsx","DATAPOOL")
+		int dpColumnCount = strDPSheetArray[0].length, dpRowCount=strDPSheetArray.length -1;
+		fileProperties.setPropertyValue("EndslNo", dpRowCount.toString());
+		
+		//*****Call function getColumnNumber_ForColumnName to get column number for runFlag column*********
+		def intColumnNumFlag=objExcelInteraction.getColumnNumber_ForColumnName("RunFlag",strDPSheetArray)
+		def intColumnNumTestCase=objExcelInteraction.getColumnNumber_ForColumnName("Testcase_Name",strDPSheetArray)
+		//Logic to store the data input in LocalFileProperties file
+		int itr;
+		for(itr=slNumber +1; itr&lt;= dpRowCount ;itr++){
+			//Set the property value of Serial Number for every iteration
+			fileProperties.setPropertyValue("slNo",itr.toString());
+			if(!(strDPSheetArray[itr][intColumnNumFlag].trim()).equalsIgnoreCase("Yes")){		
+				continue;				
+			}
+			for(int rowItr =0; rowItr &lt; dpColumnCount; rowItr++){
+				localFileProperties.setPropertyValue(strDPSheetArray[0][rowItr], strDPSheetArray[itr][rowItr]);
+			}
+			for(int rowItr =0; rowItr &lt; dpColumnCount; rowItr++){
+				//testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("LocalFileProperties").setPropertyValue(strDPSheetArray[0][rowItr], strDPSheetArray[itr][rowItr]);
+				//--Define your testCase pointer
+				intTestCaseExecuted=intTestCaseExecuted+1;
+				def testCase = testRunner.testCase.testSuite.project.getTestSuiteByName(strTestSuitesArray[iSuite][0].trim()).getTestCaseByName(strDPSheetArray[itr][intColumnNumTestCase].trim())
+				testCase.run (properties, async);
+				log.info("back to Driver");
+				break;		
+			}
+		}
+		if(itr.toInteger().equals(dpRowCount.toInteger()+1)){
+			objUtilityFunctions.removePropertyName_Value(localFileProperties);			
+		}
+	}
+	if(iSuite == intTSRowCount){
+		localFileProperties.clearPropertyValues();
+		localFileProperties.setPropertyValue("slNo","0");
+		if(intTestCaseExecuted==0){
+			objUtilityFunctions.notifyEndOfExecution("No Test cases were NOT executed since the RunFlag value in input sheet is NO for TestSuite/TestCase");
+		}else{
+			objUtilityFunctions.notifyEndOfExecution("Execution Completed");
+		}
+	}
+}catch (Exception e){
+	def strErrorMessage = e.getMessage(); 
+	//**********************************Create a Reference to Utility function and Local File properties****************
+	reusableLibraries_TestCase=testRunner.testCase.testSuite.project.testSuites["Reusable_Libraries"].testCases["Reusable_Functions"]
+	def utilityFunctions_TestStep = reusableLibraries_TestCase.getTestStepByName("Class_UtilityFunctions")
+	def localFileProperties=testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("LocalFileProperties")
+	utilityFunctions_TestStep.run(testRunner, context)
+	def objUtilityFunctions = context.objUtilityFunctions
+	//**********************************Call Utility function to notify end of execution*******************************
+	objUtilityFunctions.notifyEndOfExecution("Test Execution INTERRUPTED!!\n Error Found: Driver script was NOT executed successfully.\n Exception caught: "+strErrorMessage);
+	localFileProperties.clearPropertyValues();
+	localFileProperties.setPropertyValue("slNo","0");
+	throw new Exception("Execution Interupped....!!!!");
+}</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite>

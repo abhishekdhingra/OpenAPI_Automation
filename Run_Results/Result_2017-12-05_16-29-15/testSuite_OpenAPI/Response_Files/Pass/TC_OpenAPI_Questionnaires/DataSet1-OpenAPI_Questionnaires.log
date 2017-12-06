@@ -1,0 +1,8 @@
+======================== Response for OpenAPI_Questionnaires - DataSet: 1 ========================
+ENDPOINT- https://api-open-dev.xref.com/questionnaires?search=candidate my questionnaire Bino&limit=5&page=1
+HEADERS- Authorization : [Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjQ1MTc2MCwiYXV0aCI6MSwiZXhwIjoxNTEyNDU1MzYwLCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.GyTl6aNsL2XOz1psILQFwaJ_5njePt-c7z_7kqmTBTY] ; Content-Type : [application/json] ; 
+==============================================================================================
+
+========================================== PAGE - 1 =========================================
+[pages:[total:1, links:[next:, this:/questionnaires?search=candidate%20my%20questionnaire%20Bino&limit=5&page=1, prev:]], data:[[id:2002, title:candidate my questionnaire Bino, questions:[[title:Custom radio with swedish test]], url:/questionnaire/2002]]]
+==============================================================================================

@@ -1,0 +1,31 @@
+***************************** testSuite_OpenAPI RESULT LOG *********************************
+
+######################## Test Case: TC_OpenAPI_Auth - DataSet: 1 ##########################
+INFO- EndPoint set for Request: OpenAPI_Auth
+INFO- Header Content-Type set for Request: OpenAPI_Auth
+INFO- Header Authorization set for Request: OpenAPI_Auth
+###################### TestCase- TC_OpenAPI_Auth DATASET-1 is PASSED ######################
+
+######################## Test Case: TC_OpenAPI_CriterionID - DataSet: 1 ##########################
+INFO- EndPoint set for Request: OpenAPI_CriterionID
+INFO- Header Content-Type set for Request: OpenAPI_CriterionID
+INFO- Header Authorization set for Request: OpenAPI_CriterionID
+INFO- CRITERION ID- 541 is verified successfully in Sequel Pro database
+INFO- CRITERION NAME- 2 ref 2 years no gaps is verified successfully in Sequel Pro database
+INFO- MINIMUM YEARS- 2 is verified successfully in Sequel Pro database
+INFO- MINIMUM REFEREES- 2 is verified successfully in Sequel Pro database
+INFO- NOTE TO CANDIDATE- do it is verified successfully in Sequel Pro database
+INFO- NOTE TO REFEREE- do it is verified successfully in Sequel Pro database
+INFO- PERIOD TYPE ID- Employment is verified successfully in Sequel Pro database
+INFO- QUESTIONNAIRE ID- 2002 is verified successfully in Sequel Pro database
+INFO- PERIOD TYPE ID- Voluntary is verified successfully in Sequel Pro database
+INFO- QUESTIONNAIRE ID- 2458 is verified successfully in Sequel Pro database
+INFO- PERIOD TYPE ID- Character is verified successfully in Sequel Pro database
+INFO- QUESTIONNAIRE ID- 22 is verified successfully in Sequel Pro database
+INFO- PERIOD TYPE ID- Academic is verified successfully in Sequel Pro database
+INFO- QUESTIONNAIRE ID- 2706 is verified successfully in Sequel Pro database
+###################### TestCase- TC_OpenAPI_CriterionID DATASET-1 is PASSED ######################
+
+######################## Test Case: TC_OpenAPI_CriterionID - DataSet: 2 ##########################
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found], ; Json Response - NO JSON Response Content was fetched for CRITERION ID-554]
+###################### TestCase- TC_OpenAPI_CriterionID DATASET-2 is FAILED ######################

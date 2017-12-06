@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite id="a409ce86-c8b4-4dc7-9cec-ad4319de52c9" name="TestSuite_1" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="408df366-8669-4c64-853d-6a0c4696c840" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Excel_TC1" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Groovy Script" id="b0e09920-9d3a-4492-8159-1567d895f6da"><con:settings/><con:config><script>log.info("test case 1");
+log.info("continue");
+def agency = testRunner.testCase.testSuite.project.testSuites["Driver_TestSuite"].testCases["Driver_TestCase"].testSteps["LocalFileProperties"].getPropertyValue( "BookingContactName" )
+log.info("AGENCCYYYYY booking "+agency);</script></con:config></con:testStep><con:testStep type="groovy" name="SetRequests_EndPoint" id="0d8b6624-3a7a-4336-8afb-47040f4f2247"><con:settings/><con:config><script>//****************Reference to Different test Suite/testcase/teststep****************************
+def strExcelReadPath = testRunner.testCase.testSuite.project.testSuites["Driver_TestSuite"].testCases["Driver_TestCase"].testSteps["FileProperties"].getPropertyValue( "TestSuiteName" )
+//def strExcelReadPath = testRunner.testCase.testSuite.project.getPropertyValue( "ExcelReadPath" )
+
+reusableLibraries_TestSuite=testRunner.testCase.testSuite.project.testSuites["Reusable_Libraries"]
+reusableLibraries_TestCase=reusableLibraries_TestSuite.testCases["Reusable_Functions"]
+def excelInteractionModule_TestStep = reusableLibraries_TestCase.testSteps["Excel_Interaction"]
+def utilityFunctions_TestStep = reusableLibraries_TestCase.testSteps["Class_UtilityFunctions"]
+
+//Call and initialize the objects of Reusable Library classes
+excelInteractionModule_TestStep.run(testRunner, context)
+def objExcelInteraction = context.objExcelInteraction
+utilityFunctions_TestStep.run(testRunner, context)
+def objUtilityFunctions = context.objUtilityFunctions
+
+//Call function to set end point for all requests
+def testSteps = context.testCase.getTestStepList() 
+for(int intCount=0; intCount&lt;testSteps.size();intCount++){
+	if((testSteps.get(intCount).config.type).contains("request")){
+		objUtilityFunctions.setEndPointsForRequests(objExcelInteraction,strExcelReadPath,"REQUEST_ENDPOINTS",testSteps.get(intCount).name)	
+	}
+}</script></con:config></con:testStep><con:testStep type="groovy" name="Prepare_OutputData" id="80252f12-f2dc-4350-a939-33bdb354a42e"><con:settings/><con:config><script>def driverTestSuite= testRunner.testCase.testSuite.project.testSuites["Driver_TestSuite"].testCases["Driver_TestCase"]
+def propertyFileInfo = driverTestSuite.getTestStepByName( "FileProperties" ); 
+def localPropertyFileInfo = driverTestSuite.getTestStepByName( "LocalFileProperties" ); 
+//Getting TCIdentifier from LocalFileProperties
+//String TCIdentifier = localPropertyFileInfo.getProperty( "TCIdentifier" ).value;
+def XmlRQRSPath = testRunner.testCase.testSuite.project.getPropertyValue( "ExcelWritePath" )
+
+//**************Add variables to be added in HashMap*************************************************
+Map&lt;String,String> strOutputData = new HashMap&lt;String, String>();
+strOutputData.put("SerialNo","1" );
+strOutputData.put("FirstName","Abhishek" );
+strOutputData.put("LastName","Dhingra" );
+strOutputData.put("Status","PASS" );		
+//***************************************************************************************************
+try {
+     log.info "Excel writing started : "
+     //****************Reference to Different test Suite*********************************************
+	reusableLibraries_TestSuite=testRunner.testCase.testSuite.project.testSuites["Reusable_Libraries"]
+	reusableLibraries_TestCase=reusableLibraries_TestSuite.testCases["Reusable_Functions"]
+	def excelInteractionModule_TestStep = reusableLibraries_TestCase.testSteps["Excel_Interaction"]
+	//***********************************************************************************************
+
+	//Initializing the Excel Interaction class
+	excelInteractionModule_TestStep.run(testRunner, context)
+	
+	//Initialize the object of Excel Library class
+	def objExcelInteraction = context.objExcelInteraction
+	
+	//***********Call function in Excel Interaction Testcase class************************************
+	String strExcelWritePath="C:\\MSC Service Automation\\Sample.xlsx"
+	objExcelInteraction.writeOutputDataInExcel(strExcelWritePath,"Sheet1",strOutputData)
+	//************************************************************************************************
+   	strOutputData.clear();
+     log.info "Excel writing Finished : "         
+}
+catch(Exception ea){
+     log.info "Exception : " + ea;               
+}
+
+
+</script></con:config></con:testStep><con:testStep type="groovy" name="gotToDriver" id="cedba11a-8770-49c8-a0a2-881e339ce9d1" disabled="true"><con:settings/><con:config><script>
+/*
+def testStep = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("Initialize_Driver")
+testStep.run(testRunner, context)
+
+def properties = new com.eviware.soapui.support.types.StringToObjectMap ()
+	def async = false
+			//--Define your testCase pointer
+			def testCase = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase")
+			testCase.run (properties, async);
+
+			*/</script></con:config></con:testStep><con:testStep type="restrequest" name="Alcoholic Policy" id="6f3c2aa7-98e7-4805-bbeb-c058301107f8" disabled="true"><con:settings/><con:config service="xml" methodName="Alcoholic Policy" resourcePath="" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Alcoholic Policy" id="e200182c-5da8-4c2f-b5a2-ed8857a389dd" mediaType="application/xml" postQueryString="false"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://172.16.1.27/cgi-bin/wspd_cgi.sh/WService=MSCbroker/webserv.p</con:endpoint><con:request/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="08bcf38f-f63c-4692-a46d-727b8043a6b8" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Excel_TC2" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Groovy Script" id="e4af0723-b1f7-462b-9179-d992ac350563"><con:settings/><con:config><script>log.info("Testcase 2");</script></con:config></con:testStep><con:testStep type="groovy" name="gotToDriver" id="d168ee99-045a-426d-99e3-a8cedb7092bf" disabled="true"><con:settings/><con:config><script>log.info("back to Driver_2");
+/*
+def testStep = context.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("Initialize_Driver")
+
+    testStep.run(testRunner, context)
+*/
+def properties = new com.eviware.soapui.support.types.StringToObjectMap ()
+	def async = false
+			//--Define your testCase pointer
+			def testCase = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase")
+			testCase.run (properties, async);</script></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="911c8d89-aa4f-47ad-beed-103afb72fad6" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Excel_TC3" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Groovy Script" id="89216a60-5a6a-42c6-9854-053d2dec30d1"><con:settings/><con:config><script>log.info("test case 3");</script></con:config></con:testStep><con:testStep type="groovy" name="goToDriver" id="b6d3c617-6243-48ff-8d5c-f6b8641f92db" disabled="true"><con:settings/><con:config><script>log.info("back to Driver_3");
+/*
+def testStep = context.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("Initialize_Driver")
+
+    testStep.run(testRunner, context)
+*/
+def properties = new com.eviware.soapui.support.types.StringToObjectMap ()
+	def async = false
+			//--Define your testCase pointer
+			def testCase = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase")
+			testCase.run (properties, async);</script></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="e0eaa83e-3195-4982-8ac2-9b305770bbfe" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Excel_TC4" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Groovy Script" id="3a0046e5-8d14-4e68-8c38-43c469012c09"><con:settings/><con:config><script>log.info("test case 4");</script></con:config></con:testStep><con:testStep type="groovy" name="gotToDriver" id="515cda70-2845-41c6-84c6-70bf1faf12dd" disabled="true"><con:settings/><con:config><script>log.info("back to Driver_4");
+/*
+def testStep = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase").getTestStepByName("Initialize_Driver")
+
+    testStep.run(testRunner, context)
+    */
+
+    def properties = new com.eviware.soapui.support.types.StringToObjectMap ()
+	def async = false
+			//--Define your testCase pointer
+			def testCase = testRunner.testCase.testSuite.project.getTestSuiteByName("Driver_TestSuite").getTestCaseByName("Driver_TestCase")
+			testCase.run (properties, async);</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite>

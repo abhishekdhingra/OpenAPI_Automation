@@ -1,0 +1,6 @@
+======================== Response for OpenAPI_UserID - DataSet: 1 ========================
+ENDPOINT- https://api-open-dev.xref.com/user/87121
+HEADERS- Authorization : [Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjUxNzk0MywiYXV0aCI6MSwiZXhwIjoxNTEyNTIxNTQzLCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.XRWaFfc9pdYhzAi9zf0VUxf8jWoy7gC3FoWW9pPOo3A] ; Content-Type : [application/json] ; 
+==============================================================================================
+
+{"id":87121,"first_name":"Joe","last_name":"Bloggs 87121","email":"dev+87121@xref.com.au","permissions":["can_cancel_checks","can_cancel_others_checks","can_view_others_checks","can_request_checks"],"url":"/user/87121"}

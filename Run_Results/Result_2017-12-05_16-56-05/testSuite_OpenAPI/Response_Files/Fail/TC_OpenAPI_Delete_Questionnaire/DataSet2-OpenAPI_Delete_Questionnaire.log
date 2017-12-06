@@ -1,0 +1,7 @@
+======================== Response for OpenAPI_Delete_Questionnaire - DataSet: 2 ========================
+ENDPOINT- https://api-open-dev.xref.com/questionnaire/753
+HEADERS- Authorization : [Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjQ1MzM3MSwiYXV0aCI6MSwiZXhwIjoxNTEyNDU2OTcxLCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.S4bS26Pod-4x6jserw-ekV8iYpN7Sw6dBkqKnm84g8w] ; Content-Type : [application/json] ; 
+==============================================================================================
+
+NO Response Content since the Questionnaire ID - 753 was NOT Deleted successfully
+[Response Status is - [HTTP/1.1 404 Not Found]]

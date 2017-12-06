@@ -1,0 +1,6 @@
+############################## Error Log ##############################
+
+=============== Testcase Name TC_OpenAPI_CriterionID - DataSet: 2 ========================
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found], ; Json Response - NO JSON Response Content was fetched for CRITERION ID-554]
+
+=========================================================================

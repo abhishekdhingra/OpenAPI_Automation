@@ -1,0 +1,22 @@
+################################ Error Log ################################
+
+=============== TC_OpenAPI_CriterionID - DataSet: null ========================
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found], ; Json Response - NO JSON Response Content was fetched for CRITERION ID-554]
+
+=============== TC_OpenAPI_Delete_Criteria - DataSet: null ========================
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found]]
+
+=============== TC_OpenAPI_QuestionnaireID - DataSet: null ========================
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found], ; Json Response - NO JSON Response Content was fetched for QUESTIONNAIRE ID-753]
+
+=============== TC_OpenAPI_Delete_Questionnaire - DataSet: null ========================
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found]]
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found]]
+
+=============== TC_OpenAPI_CancelCheck - DataSet: null ========================
+ERROR- XREF has NOT been cancelled successfully
+ERROR-  Response error- [Response Status is - [HTTP/1.1 400 Bad Request]]
+{"detail":"Check cannot be cancelled when it is in EXPIRED or COMPLETED state."}
+
+=============== TC_OpenAPI_RetrieveReport - DataSet: null ========================
+ERROR-  Response error- [Response Status is - [HTTP/1.1 404 Not Found], ; Json Response - NO JSON Response Content was fetched for REPORT ID-4769401]

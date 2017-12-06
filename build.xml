@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+]>
+
+<project name="XREF_OpenAPI" default="SOAPUI" basedir=".">  
+<target name="SOAPUI">
+    <exec dir="./Report" executable="/Applications/SoapUI-5.3.0.app/Contents/java/app/bin/testrunner.sh">
+    <arg line= "-sDriver_TestSuite '/Users/apple/Documents/workspace/Xref_OpenAPI/Xref-OpenAPI-soapui-project.xml'"></arg>
+	</exec>
+</target>
+</project>

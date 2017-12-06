@@ -1,0 +1,6 @@
+======================== Response for OpenAPI_Auth - DataSet: 1 ========================
+ENDPOINT- https://api-open-dev.xref.com/auth
+HEADERS- Authorization : [Key abcdefghij] ; Content-Type : [application/json] ; 
+==============================================================================================
+
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjUxNjU2NywiYXV0aCI6MSwiZXhwIjoxNTEyNTIwMTY3LCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.K2YQRDKV71dvkypFrS8_1rkTlPk_8Y27BZjar8AqJcE"}

@@ -1,0 +1,6 @@
+======================== Response for OpenAPI_Refresh - DataSet: 2 ========================
+ENDPOINT- https://api-open-dev.xref.com/auth/refresh
+HEADERS- Authorization : [Key abcdefghij] ; Content-Type : [application/json] ; 
+==============================================================================================
+
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjUxNTQ3MiwiYXV0aCI6MSwiZXhwIjoxNTEyNTE5MDc3LCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.smxZF-rWJijXBjS0zpANn6dODpEOmOaOWvSszYS4Jak"}
