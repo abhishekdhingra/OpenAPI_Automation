@@ -1,6 +1,0 @@
-======================== Response for OpenAPI_Credits - DataSet: 1 ========================
-ENDPOINT- https://api-open-dev.xref.com/credits
-HEADERS- Authorization : [Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjQ1MzM3MSwiYXV0aCI6MSwiZXhwIjoxNTEyNDU2OTcxLCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.S4bS26Pod-4x6jserw-ekV8iYpN7Sw6dBkqKnm84g8w] ; Content-Type : [application/json] ; 
-==============================================================================================
-
-{"credits_remaining":4333}

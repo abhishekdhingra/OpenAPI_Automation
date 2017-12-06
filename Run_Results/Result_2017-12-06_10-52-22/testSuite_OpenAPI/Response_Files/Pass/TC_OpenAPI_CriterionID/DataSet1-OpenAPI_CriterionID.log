@@ -1,6 +1,0 @@
-======================== Response for OpenAPI_CriterionID - DataSet: 1 ========================
-ENDPOINT- https://api-open-dev.xref.com/criterion/541
-HEADERS- Authorization : [Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGlzaGVrLmRoaW5ncmFAeHJlZi5nbG9iYWwiLCJvcmlnX2lhdCI6MTUxMjUxNzk0MywiYXV0aCI6MSwiZXhwIjoxNTEyNTIxNTQzLCJ1c2VyX2lkIjo0Mjc0MTQsImVtYWlsIjoiYWJoaXNoZWsuZGhpbmdyYUB4cmVmLmdsb2JhbCJ9.XRWaFfc9pdYhzAi9zf0VUxf8jWoy7gC3FoWW9pPOo3A] ; Content-Type : [application/json] ; 
-==============================================================================================
-
-{"id":541,"name":"2 ref 2 years no gaps","min_years":2,"min_referees":2,"mappings":[{"period_type_name":"Employment","questionnaire_id":2002,"questionnaire_title":"candidate my questionnaire Bino"},{"period_type_name":"Voluntary","questionnaire_id":2458,"questionnaire_title":"B_CandTest Questionnaire 190217"},{"period_type_name":"Character","questionnaire_id":22,"questionnaire_title":"Xref Standard Template"},{"period_type_name":"Academic","questionnaire_id":2706,"questionnaire_title":"Xref Standard Bilingual"}],"created_on":"2017-06-01T04:49:58Z","created_by":"Admin","note_to_candidate":"do it","note_to_referee":"do it","url":"/criterion/541"}
